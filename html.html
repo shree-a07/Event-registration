@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Event Registration - Subhashree</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+*{box-sizing:border-box;}
+
+body{
+margin:0;
+font-family:Arial, sans-serif;
+background:linear-gradient(to right,#4e73df,#1cc88a);
+}
+
+.container{
+width:100%;
+max-width:600px;
+margin:auto;
+background:white;
+padding:20px;
+min-height:100vh;
+}
+
+.step{display:none;}
+.step.active{display:block;}
+
+h2{text-align:center;}
+
+input, select{
+width:100%;
+padding:12px;
+margin:8px 0 18px 0;
+font-size:16px;
+border-radius:6px;
+border:1px solid #ccc;
+}
+
+label{font-weight:bold;}
+
+button{
+width:100%;
+padding:12px;
+margin:8px 0;
+font-size:16px;
+border:none;
+border-radius:6px;
+cursor:pointer;
+}
+
+.next-btn{background:#28a745;color:white;}
+.prev-btn{background:#6c757d;color:white;}
+.submit-btn{background:#4e73df;color:white;}
+
+.progress{
+display:flex;
+justify-content:space-between;
+margin-bottom:20px;
+}
+
+.circle{
+width:30px;
+height:30px;
+border-radius:50%;
+background:#ccc;
+text-align:center;
+line-height:30px;
+color:white;
+font-size:14px;
+}
+
+.circle.active{background:#4e73df;}
+
+/* Table Fix */
+.table-container{
+width:100%;
+overflow-x:auto;
+margin-top:10px;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+font-size:14px;
+}
+
+th, td{
+border:1px solid #ccc;
+padding:8px;
+text-align:center;
+}
+
+th{
+background:#4e73df;
+color:white;
+}
+
+.counter{
+text-align:right;
+font-weight:bold;
+margin-top:10px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+<h2>Event Registration Portal</h2>
+
+<div class="progress">
+<div class="circle active">1</div>
+<div class="circle">2</div>
+<div class="circle">3</div>
+<div class="circle">4</div>
+</div>
+
+<form id="multiForm">
+
+<!-- PAGE 1 -->
+<div class="step active">
+<h3>Event Details</h3>
+<p><b>Event:</b> Tech Innovators Workshop 2026</p>
+<p><b>Date:</b> 15 April 2026</p>
+<p><b>Time:</b> 10:00 AM – 4:00 PM</p>
+<p><b>Venue:</b> College Auditorium</p>
+
+<button type="button" class="next-btn" onclick="nextStep()">Next</button>
+</div>
+
+<!-- PAGE 2 -->
+<div class="step">
+<h3>Personal Information</h3>
+
+<label>Student Name</label>
+<input type="text" id="studentName" required>
+
+<label>Year</label>
+<input type="text" required>
+
+<label>College Code</label>
+<input type="text" required>
+
+<label>College Name</label>
+<input type="text" required>
+
+<label>Department</label>
+<input type="text" required>
+
+<label>Semester</label>
+<input type="text" required>
+
+<label>Roll No</label>
+<input type="text" required>
+
+<label>NM ID</label>
+<input type="text" required>
+
+<label>Date</label>
+<input type="date" required>
+
+<label>Project Title</label>
+<input type="text" required>
+
+<button type="button" class="prev-btn" onclick="prevStep()">Previous</button>
+<button type="button" class="next-btn" onclick="nextStep()">Next</button>
+</div>
+
+<!-- PAGE 3 -->
+<div class="step">
+<h3>Event Preference & Registration</h3>
+
+<label>Select Event</label>
+<select id="event" required>
+<option>Web Development</option>
+<option>Artificial Intelligence</option>
+<option>Cyber Security</option>
+</select>
+
+<label>Mode</label>
+<select id="mode" required>
+<option>Online</option>
+<option>Offline</option>
+</select>
+
+<label>Email ID</label>
+<input type="email" id="email" required>
+
+<button type="button" class="prev-btn" onclick="prevStep()">Previous</button>
+<button type="button" class="next-btn" onclick="registerParticipant()">Register & View</button>
+</div>
+
+<!-- PAGE 4 -->
+<div class="step">
+<h3>Registered Participants</h3>
+
+<div class="table-container">
+<table id="participantsTable">
+<thead>
+<tr>
+<th>Student Name</th>
+<th>Email ID</th>
+<th>Event</th>
+<th>Mode</th>
+</tr>
+</thead>
+<tbody>
+<!-- Empty Initially -->
+</tbody>
+</table>
+</div>
+
+<div class="counter">
+Total Registered: <span id="count">0</span>
+</div>
+
+<button type="button" class="prev-btn" onclick="prevStep()">Previous</button>
+<button type="submit" class="submit-btn">Submit Final</button>
+</div>
+
+</form>
+</div>
+
+<script>
+let currentStep=0;
+let steps=document.querySelectorAll(".step");
+let circles=document.querySelectorAll(".circle");
+let count=0;
+
+function showStep(index){
+steps.forEach(s=>s.classList.remove("active"));
+circles.forEach(c=>c.classList.remove("active"));
+steps[index].classList.add("active");
+circles[index].classList.add("active");
+}
+
+function nextStep(){
+if(currentStep<steps.length-1){
+currentStep++;
+showStep(currentStep);
+}
+}
+
+function prevStep(){
+if(currentStep>0){
+currentStep--;
+showStep(currentStep);
+}
+}
+
+function registerParticipant(){
+let name=document.getElementById("studentName").value;
+let email=document.getElementById("email").value;
+let event=document.getElementById("event").value;
+let mode=document.getElementById("mode").value;
+
+if(name==""||email==""){
+alert("Please fill required details");
+return;
+}
+
+let table=document.querySelector("#participantsTable tbody");
+let row=table.insertRow();
+
+row.insertCell(0).innerText=name;
+row.insertCell(1).innerText=email;
+row.insertCell(2).innerText=event;
+row.insertCell(3).innerText=mode;
+
+count++;
+document.getElementById("count").innerText=count;
+
+nextStep();
+}
+
+document.getElementById("multiForm").addEventListener("submit",function(e){
+e.preventDefault();
+alert("Registration Completed Successfully!");
+});
+</script>
+
+</body>
+</html>
